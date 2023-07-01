@@ -1,0 +1,14 @@
+name: Check tasks on cross-references PRs
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  check-tasks:
+    if: github.event.pull_request.merged == 'true'
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo $(gh api /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/timeline)
