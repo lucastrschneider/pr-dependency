@@ -21,7 +21,7 @@ jobs:
           NUMBER: ${{ github.event.pull_request.number }}
 
       - run: |
-          readarray -t cr_arr <<< "${CROSS_REFERENCES}"
+          read -a cr_arr <<< "${CROSS_REFERENCES}"
           declare -p cr_arr
           for issue_url in "${cr_arr[@]}"
           do
