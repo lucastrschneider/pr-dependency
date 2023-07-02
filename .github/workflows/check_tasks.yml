@@ -27,8 +27,8 @@ jobs:
           do
             body=$(gh api "$issue_url" --jq '.body')
 
-            pattern="\[ \][ ]*.*$OWNER\/$REPO.*11"
-            value="\[x\] $OWNER\/$REPO\#11"
+            pattern="\[ \][ ]*.*$OWNER\/$REPO.*$NUMBER"
+            value="\[x\] $OWNER\/$REPO\#$NUMBER"
 
             echo "Body from $issue_url"
             echo "$body"
@@ -51,3 +51,4 @@ jobs:
           GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
+          NUMBER: ${{ github.event.pull_request.number }}

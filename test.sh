@@ -2,7 +2,7 @@
 
 OWNER='lucastrschneider'
 REPO='pr-dependency'
-NUMBER='11'
+NUMBER="$1"
 
 # First step
 crossReferences="$(gh api /repos/$OWNER/$REPO/issues/$NUMBER/timeline --jq '.[] | select(.event == "cross-referenced") | .source["issue"]["url"]')"
@@ -15,8 +15,8 @@ for issue_url in "${cr_arr[@]}"
 do
     body=$(gh api "$issue_url" --jq '.body')
 
-    pattern="\[ \][ ]*.*$OWNER\/$REPO.*11"
-    value="\[x\] $OWNER\/$REPO\#11"
+    pattern="\[ \][ ]*.*$OWNER\/$REPO.*$NUMBER"
+    value="\[x\] $OWNER\/$REPO\#$NUMBER"
 
     echo "Body from $issue_url"
     echo "$body"
