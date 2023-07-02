@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 OWNER='lucastrschneider'
 REPO='pr-dependency'
 NUMBER='11'
