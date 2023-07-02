@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 OWNER='lucastrschneider'
-REPO='pr-dependency'
+REPO='pr-upstream'
 NUMBER="$1"
 
 # First step
