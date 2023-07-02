@@ -2,6 +2,8 @@
 
 This repository implements a GitHub Actions workflow that is triggered every time a PR is merged. The workflow searches for references made in other PRs (from other repositories) to the merged PR (from this repository) and, if the mention occurred on a tasklist item, it checks that item.
 
+This repository is used alongside [pr-dependent](https://github.com/lucastrschneider/pr-dependent) to test the automation.
+
 ## Next steps
 
 - Investigate behavior when repository that referenced the PR belongs to other user/organization;
