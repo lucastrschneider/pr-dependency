@@ -18,7 +18,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       - run: |
-          read -a cr_arr <<< "$CROSS_REFERENCES"
+          readarray -t cr_arr <<< "${CROSS_REFERENCES}"
           for pr in "${cr_arr[@]}"
           do
               echo $(gh pr view "$pr" --json body)
