@@ -7,7 +7,7 @@ on:
 
 jobs:
   check-tasks:
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -42,7 +42,7 @@ jobs:
               echo "No changes were made, no need to update issue body"
             else
               echo "Issue body changed"
-              gh api "$issue_url" -f body="$new_body"
+              gh api "$issue_url" -f body="$new_body" --method PATCH
             fi
 
             echo ""
