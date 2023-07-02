@@ -7,24 +7,47 @@ on:
 
 jobs:
   check-tasks:
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
       - run: |
-          crossReferences="$(gh api /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/timeline --jq '.[] | select(.event == "cross-referenced") | .source["issue"]["html_url"]')"
+          crossReferences="$(gh api /repos/$OWNER/$REPO/issues/$NUMBER/timeline --jq '.[] | select(.event == "cross-referenced") | .source["issue"]["url"]')"
           echo 'CROSS_REFERENCES='$crossReferences >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ github.token }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          NUMBER: ${{ github.event.pull_request.number }}
 
       - run: |
           readarray -t cr_arr <<< "${CROSS_REFERENCES}"
-          for pr in "${cr_arr[@]}"
+          declare -p cr_arr
+          for issue_url in "${cr_arr[@]}"
           do
-              echo $(gh pr view "$pr" --json body)
+            body=$(gh api "$issue_url" --jq '.body')
+
+            pattern="\[ \][ ]*.*$OWNER\/$REPO.*11"
+            value="\[x\] $OWNER\/$REPO\#11"
+
+            echo "Body from $issue_url"
+            echo "$body"
+
+            new_body=$(echo "$body" | sed "s/$pattern/$value/")
+
+            echo "Issue body after sed"
+            echo "$new_body"
+
+            if [ "$body" == "$new_body" ]; then
+              echo "No changes were made, no need to update issue body"
+            else
+              echo "Issue body changed"
+              gh api "$issue_url" -f body="$new_body"
+            fi
+
+            echo ""
           done
         env:
           GH_TOKEN: ${{ github.token }}
-
-
-      - run: echo "Got here"
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
